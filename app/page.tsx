@@ -1,69 +1,111 @@
-import Image from "next/image";
+ "use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
+type Plot = {
+  id: string;
+  plot_number: number;
+  size_sqyd: number;
+  facing: string | null;
+  road_width_ft: number;
+  is_corner: boolean;
+  price_per_sqyd: number;
+  status: "available" | "sold" | "held";
+  map_x: number;
+  map_y: number;
+};
+
+const IMG_W = 875;
+const IMG_H = 1280;
+
+const colors = {
+  available: "bg-green-500 text-white",
+  sold: "bg-red-500 text-white",
+  held: "bg-amber-400 text-black",
+};
+
+const rupees = (n: number) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(n);
 
 export default function Home() {
+  const [plots, setPlots] = useState<Plot[]>([]);
+  const [selected, setSelected] = useState<Plot | null>(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    supabase
+      .from("plots")
+      .select("*")
+      .order("plot_number")
+      .then(({ data, error }) => {
+        if (error) setError(error.message);
+        else setPlots(data as Plot[]);
+      });
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="mx-auto max-w-5xl p-6">
+      <h1 className="text-2xl font-bold">Sy No 18 Layout - Indrakaran</h1>
+      <p className="mb-3 text-gray-600">Click a plot number to see its details</p>
+
+      <div className="mb-4 flex gap-4 text-sm">
+        <span><b className="text-green-600">●</b> Available</span>
+        <span><b className="text-red-500">●</b> Sold</span>
+        <span><b className="text-amber-500">●</b> Held</span>
+      </div>
+
+      {error && <p className="text-red-600">Error: {error}</p>}
+
+      <div className="flex flex-col gap-6 md:flex-row">
+        <div className="relative w-full max-w-xl">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/layout.jpg" alt="Layout map" className="w-full" />
+          {plots.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => setSelected(p)}
+              style={{
+                left: `${(p.map_x / IMG_W) * 100}%`,
+                top: `${(p.map_y / IMG_H) * 100}%`,
+              }}
+              className={`absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[11px] font-bold shadow ${
+                colors[p.status]
+              } ${selected?.id === p.id ? "ring-4 ring-blue-500" : ""}`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              {p.plot_number}
+            </button>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="md:sticky md:top-6 md:w-72 md:self-start">
+          {selected ? (
+            <div className="rounded-lg border p-4">
+              <h2 className="text-xl font-bold">
+                Plot {selected.plot_number}{" "}
+                <span className="text-sm font-normal capitalize">
+                  ({selected.status})
+                </span>
+              </h2>
+              <ul className="mt-2 space-y-1">
+                <li>Size: {selected.size_sqyd} sq yd</li>
+                <li>Facing: {selected.facing ?? "Not available"}</li>
+                <li>Road width: {selected.road_width_ft} ft</li>
+                <li>Price: {rupees(selected.price_per_sqyd)} per sq yd</li>
+                <li className="font-bold">
+                  Total: {rupees(selected.price_per_sqyd * selected.size_sqyd)}
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <p className="text-gray-500">Select a plot on the map</p>
+          )}
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
