@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ChatWidget from "./ChatWidget";
+import BookingWidget from "./BookingWidget";
 
 type Plot = {
   id: string;
@@ -218,6 +219,7 @@ export default function Home() {
         </div>
       )}
       <ChatWidget />
+      <BookingWidget />
     </main>
   );
 }
