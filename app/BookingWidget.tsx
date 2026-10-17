@@ -28,52 +28,50 @@ export default function BookingWidget() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slotId: selectedSlot.id, name, phone }),
     });
-    if (res.ok) {
-      setStatus("done");
-    } else {
-      setStatus("error");
-    }
+    setStatus(res.ok ? "done" : "error");
   };
 
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 left-4 z-50 rounded-full bg-green-600 px-5 py-3 font-semibold text-white shadow-lg"
+        className="fixed bottom-4 left-4 z-50 rounded-full bg-[var(--clay)] px-5 py-3 text-sm font-medium text-white shadow-lg transition-transform hover:-translate-y-0.5"
       >
-        📅 Book a Visit
+        Book a visit
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-sm rounded-lg bg-white p-5">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-lg font-bold">Book a Visit</h2>
-              <button onClick={() => setOpen(false)}>✕</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--ink)]/40 p-4">
+          <div className="animate-panel-in w-full max-w-sm rounded-lg bg-white p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-display text-lg font-medium">Book a visit</h2>
+              <button onClick={() => setOpen(false)} className="text-[var(--ink)]/50 hover:text-[var(--ink)]">
+                ✕
+              </button>
             </div>
 
             {status === "done" ? (
-              <p className="text-green-700">
+              <p className="text-sm text-[var(--available)]">
                 Booked! We'll see you on {selectedSlot?.slot_date} at {selectedSlot?.slot_time}.
               </p>
             ) : (
               <>
-                <p className="mb-2 text-sm text-gray-600">Choose a slot</p>
-                <div className="mb-4 flex flex-col gap-2">
+                <p className="mb-2 text-sm text-[var(--ink)]/60">Choose a slot</p>
+                <div className="mb-4 flex flex-col gap-1.5">
                   {slots.length === 0 && (
-                    <p className="text-sm text-gray-400">No open slots right now.</p>
+                    <p className="text-sm text-[var(--ink)]/40">No open slots right now.</p>
                   )}
                   {slots.map((s) => (
                     <button
                       key={s.id}
                       onClick={() => setSelectedSlot(s)}
-                      className={`rounded border px-3 py-2 text-left text-sm ${
+                      className={`rounded-md border px-3 py-2 text-left text-sm ${
                         selectedSlot?.id === s.id
-                          ? "border-green-600 bg-green-50"
-                          : "border-gray-300"
+                          ? "border-[var(--clay)] bg-[var(--clay)]/5"
+                          : "border-[var(--line)]"
                       }`}
                     >
-                      {s.slot_date} - {s.slot_time}
+                      {s.slot_date} · {s.slot_time}
                     </button>
                   ))}
                 </div>
@@ -84,23 +82,23 @@ export default function BookingWidget() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Your name"
-                      className="mb-2 w-full rounded border px-2 py-1 text-sm"
+                      className="mb-1.5 w-full rounded-md border border-[var(--line)] px-2.5 py-1.5 text-sm outline-none focus:border-[var(--clay)]"
                     />
                     <input
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="Phone number"
-                      className="mb-3 w-full rounded border px-2 py-1 text-sm"
+                      className="mb-3 w-full rounded-md border border-[var(--line)] px-2.5 py-1.5 text-sm outline-none focus:border-[var(--clay)]"
                     />
                     <button
                       onClick={submit}
                       disabled={status === "sending"}
-                      className="w-full rounded bg-green-600 py-2 font-semibold text-white disabled:bg-gray-300"
+                      className="w-full rounded-md bg-[var(--clay)] py-2 text-sm font-medium text-white disabled:bg-[var(--ink)]/20"
                     >
-                      {status === "sending" ? "Booking..." : "Confirm Booking"}
+                      {status === "sending" ? "Booking..." : "Confirm booking"}
                     </button>
                     {status === "error" && (
-                      <p className="mt-2 text-sm text-red-600">
+                      <p className="mt-2 text-sm text-[var(--sold)]">
                         That slot was just taken. Please pick another.
                       </p>
                     )}
