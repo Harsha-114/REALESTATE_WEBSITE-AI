@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import Link from "next/link";
 import Nav from "./components/Nav";
@@ -55,25 +55,45 @@ export default function HomePage() {
 
         <section className="bg-white px-6 py-16">
           <div className="mx-auto max-w-5xl">
-            <h2 className="font-display mb-6 text-2xl font-medium">Current project</h2>
-            <Link
-              href="/properties/sy-no-18"
-              className="block overflow-hidden rounded-lg border border-[var(--line)] transition-transform hover:-translate-y-0.5"
-            >
-              <div className="relative">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/layout.jpg" alt="Sy No 18 layout" className="h-56 w-full object-cover" />
-              </div>
-              <div className="p-5">
-                <h3 className="font-display text-lg font-medium">Sy No 18, Indrakaran</h3>
-                <p className="mt-1 text-sm text-[var(--ink)]/60">
-                  Open plots in Indrakaran village, with 30 ft internal roads and proximity to the 100 ft Rudraram road.
-                </p>
-                <span className="mt-3 inline-block text-sm font-medium text-[var(--navy)]">
-                  View layout and availability →
-                </span>
-              </div>
-            </Link>
+            <h2 className="font-display mb-6 text-2xl font-medium">Current projects</h2>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Link
+                href="/properties/sy-no-18"
+                className="block overflow-hidden rounded-lg border border-[var(--line)] transition-transform hover:-translate-y-0.5"
+              >
+                <div className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/layout.jpg" alt="Sy No 18 layout" className="h-48 w-full object-cover" />
+                </div>
+                <div className="p-5">
+                  <h3 className="font-display text-lg font-medium">Sy No 18, Indrakaran</h3>
+                  <p className="mt-1 text-sm text-[var(--ink)]/60">
+                    Open plots in Indrakaran village, with 30 ft internal roads and proximity to the 100 ft Rudraram road.
+                  </p>
+                  <span className="mt-3 inline-block text-sm font-medium text-[var(--navy)]">
+                    View layout and availability →
+                  </span>
+                </div>
+              </Link>
+
+              <Link
+                href="/properties/santorini-villas"
+                className="block overflow-hidden rounded-lg border border-[var(--line)] transition-transform hover:-translate-y-0.5"
+              >
+                <div className="flex h-48 w-full items-center justify-center bg-[var(--navy)] text-white">
+                  <span className="font-display text-xl">Santorini Villas</span>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-display text-lg font-medium">Santorini Villas, Mokila</h3>
+                  <p className="mt-1 text-sm text-[var(--ink)]/60">
+                    126 villas across 4, 5 and 6 BHK layouts in a gated community near Mokila.
+                  </p>
+                  <span className="mt-3 inline-block text-sm font-medium text-[var(--navy)]">
+                    View villas and availability →
+                  </span>
+                </div>
+              </Link>
+            </div>
           </div>
         </section>
       </main>

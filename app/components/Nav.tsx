@@ -29,37 +29,26 @@ export default function Nav() {
             onMouseEnter={() => setPropsOpen(true)}
             onMouseLeave={() => setPropsOpen(false)}
           >
-            <button className="flex items-center gap-1" type="button">
+            <button className="flex items-center gap-1">
               Properties
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className={`transition-transform duration-200 ${propsOpen ? "rotate-180" : ""}`}
-                aria-hidden="true"
-              >
-                <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-
             {propsOpen && (
-              <div className="absolute left-0 top-full mt-2 w-48 rounded-md border border-[var(--line)] bg-white p-2 shadow-lg">
-                <Link href="/properties" className="block rounded px-3 py-2 text-sm text-[var(--navy)] hover:bg-[var(--line)]">
+              <div className="absolute left-0 top-full w-56 rounded-md border border-[var(--line)] bg-white py-2 shadow-lg">
+                <Link href="/properties" className="block px-4 py-2 text-sm text-[var(--ink)] hover:bg-[var(--paper)]">
                   All Properties
                 </Link>
-                <Link href="/properties?type=buy" className="block rounded px-3 py-2 text-sm text-[var(--navy)] hover:bg-[var(--line)]">
-                  Buy
+                <Link href="/properties/sy-no-18" className="block px-4 py-2 text-sm text-[var(--ink)] hover:bg-[var(--paper)]">
+                  Sy No 18, Indrakaran
                 </Link>
-                <Link href="/properties?type=rent" className="block rounded px-3 py-2 text-sm text-[var(--navy)] hover:bg-[var(--line)]">
-                  Rent
+                <Link href="/properties/santorini-villas" className="block px-4 py-2 text-sm text-[var(--ink)] hover:bg-[var(--paper)]">
+                  Santorini Villas, Mokila
                 </Link>
               </div>
             )}
           </div>
-
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
         </div>
